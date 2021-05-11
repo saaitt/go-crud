@@ -1,0 +1,14 @@
+version: '3.3'
+
+services:
+  db:
+    image: postgres:13
+    container_name: go_crud_db
+    environment:
+      - POSTGRES_DB=go_crud_db
+      - POSTGRES_USER=go
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_HOST=0.0.0.0
+      - POSTGRES_PORT=5432
+    ports:
+      - "5432:5432"
