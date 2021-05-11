@@ -46,3 +46,11 @@ func (p ProductRepo) Delete(productID int) error {
 	}
 	return nil
 }
+func (p ProductRepo) FindByTitle(query string) ([]model.Product,error)  {
+	products:= []model.Product{}
+	if err := p.DB.Model(&model.Product{}).Find(&products,"title LIKE ?",`%`+query+`%`).Error; err != nil{
+		return nil,err
+	}
+	fmt.Println(products,`%`+query+`%`)
+	return products,nil
+}

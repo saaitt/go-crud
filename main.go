@@ -35,5 +35,6 @@ func main() {
 	e.POST("/", product.Create)
 	e.POST("/disable", product.Disable)
 	e.DELETE("/", product.Delete)
+	e.GET("/",product.Find)
 	e.Logger.Fatal(e.Start(":9876"))
 }

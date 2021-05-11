@@ -12,6 +12,7 @@ type ProductRepo interface {
 	Disable(productID int) error
 	ListActive(pageNo int) ([]model.Product, error)
 	Delete(productID int) error
+	FindByTitle(query string) ([]model.Product,error)
 }
 type ProductService struct {
 	Repo ProductRepo
@@ -91,3 +92,20 @@ func (p ProductService) Delete(request request.DisableOrDeleteProductRequest) er
 	}
 	return nil
 }
+func (p ProductService) Find(query string) ([]response.ProductResponse, error) {
+	products, err := p.Repo.FindByTitle(query)
+	if err != nil {
+		return nil, err
+	}
+	responses := []response.ProductResponse{}
+	for _, product := range products {
+		responses = append(responses, response.ProductResponse{
+			ID:          int(product.ID),
+			Title:       product.Title,
+			Description: product.Description,
+			IsActive:    product.IsActive,
+		})
+	}
+	return responses, nil
+}
+

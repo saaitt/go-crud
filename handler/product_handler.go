@@ -72,3 +72,12 @@ func (p ProductHandler) Delete(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, "product is deleted")
 }
+
+func (p ProductHandler) Find(c echo.Context) error {
+	query := c.QueryParam("q")
+	resp, err := p.Service.Find(query)
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+	return c.JSON(http.StatusOK, resp)
+}
