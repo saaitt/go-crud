@@ -9,6 +9,8 @@ import (
 type ProductRepo interface {
 	Create(product *model.Product) error
 	List(pageNo int) ([]model.Product, error)
+	Disable(productID int) error
+	ListActive(pageNo int) ([]model.Product,error)
 }
 type ProductService struct {
 	Repo ProductRepo
@@ -36,6 +38,33 @@ func (p ProductService) Create(request request.CreateProductRequest) (*response.
 
 func (p ProductService) List(pageNo int) ([]response.ProductResponse, error) {
 	products, err := p.Repo.List(pageNo)
+	if err != nil {
+		return nil, err
+	}
+	responses := []response.ProductResponse{}
+	for _, product := range products {
+		responses = append(responses, response.ProductResponse{
+			ID:          int(product.ID),
+			Title:       product.Title,
+			Description: product.Description,
+			IsActive:    product.IsActive,
+		})
+	}
+	return responses, nil
+}
+func (p ProductService) Disable(request request.DisableProductRequest)  error {
+	if err := request.Validate(); err != nil {
+		return err
+	}
+
+	if err := p.Repo.Disable(request.ID); err != nil {
+		return  err
+	}
+	return  nil
+}
+
+func (p ProductService) ListActive(pageNo int) ([]response.ProductResponse, error) {
+	products, err := p.Repo.ListActive(pageNo)
 	if err != nil {
 		return nil, err
 	}

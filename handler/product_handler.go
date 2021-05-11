@@ -39,3 +39,26 @@ func (p ProductHandler) List(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, resp)
 }
+func (p ProductHandler) Disable(c echo.Context) error {
+	req := request.DisableProductRequest{}
+	if err := c.Bind(&req); err != nil {
+		return echo.ErrInternalServerError
+	}
+	if err := p.Service.Disable(req); err != nil {
+		return echo.ErrInternalServerError
+	}
+	return c.JSON(http.StatusOK, "product is disabled")
+}
+func (p ProductHandler) ListActive(c echo.Context) error {
+	pageNo, err := strconv.Atoi(c.Param("page_no"))
+	if err != nil {
+		fmt.Println(err)
+		return echo.ErrInternalServerError
+	}
+	resp, err := p.Service.ListActive(pageNo)
+	if err != nil {
+		fmt.Println(err)
+		return echo.ErrInternalServerError
+	}
+	return c.JSON(http.StatusOK, resp)
+}
