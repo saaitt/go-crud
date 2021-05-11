@@ -10,7 +10,8 @@ type ProductRepo interface {
 	Create(product *model.Product) error
 	List(pageNo int) ([]model.Product, error)
 	Disable(productID int) error
-	ListActive(pageNo int) ([]model.Product,error)
+	ListActive(pageNo int) ([]model.Product, error)
+	Delete(productID int) error
 }
 type ProductService struct {
 	Repo ProductRepo
@@ -52,15 +53,15 @@ func (p ProductService) List(pageNo int) ([]response.ProductResponse, error) {
 	}
 	return responses, nil
 }
-func (p ProductService) Disable(request request.DisableProductRequest)  error {
+func (p ProductService) Disable(request request.DisableOrDeleteProductRequest) error {
 	if err := request.Validate(); err != nil {
 		return err
 	}
 
 	if err := p.Repo.Disable(request.ID); err != nil {
-		return  err
+		return err
 	}
-	return  nil
+	return nil
 }
 
 func (p ProductService) ListActive(pageNo int) ([]response.ProductResponse, error) {
@@ -78,4 +79,15 @@ func (p ProductService) ListActive(pageNo int) ([]response.ProductResponse, erro
 		})
 	}
 	return responses, nil
+}
+
+func (p ProductService) Delete(request request.DisableOrDeleteProductRequest) error {
+	if err := request.Validate(); err != nil {
+		return err
+	}
+
+	if err := p.Repo.Delete(request.ID); err != nil {
+		return err
+	}
+	return nil
 }

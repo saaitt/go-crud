@@ -40,7 +40,7 @@ func (p ProductHandler) List(c echo.Context) error {
 	return c.JSON(http.StatusOK, resp)
 }
 func (p ProductHandler) Disable(c echo.Context) error {
-	req := request.DisableProductRequest{}
+	req := request.DisableOrDeleteProductRequest{}
 	if err := c.Bind(&req); err != nil {
 		return echo.ErrInternalServerError
 	}
@@ -61,4 +61,14 @@ func (p ProductHandler) ListActive(c echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 	return c.JSON(http.StatusOK, resp)
+}
+func (p ProductHandler) Delete(c echo.Context) error {
+	req := request.DisableOrDeleteProductRequest{}
+	if err := c.Bind(&req); err != nil {
+		return echo.ErrInternalServerError
+	}
+	if err := p.Service.Delete(req); err != nil {
+		return echo.ErrInternalServerError
+	}
+	return c.JSON(http.StatusOK, "product is deleted")
 }

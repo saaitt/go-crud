@@ -17,11 +17,11 @@ func (c CreateProductRequest) Validate() error {
 	return nil
 }
 
-type DisableProductRequest struct {
+type DisableOrDeleteProductRequest struct {
 	ID int `json:"id"`
 }
 
-func (d DisableProductRequest) Validate() error {
+func (d DisableOrDeleteProductRequest) Validate() error {
 	if d.ID == 0 {
 		return errors.New("id is required")
 	}

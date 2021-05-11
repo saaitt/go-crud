@@ -34,5 +34,6 @@ func main() {
 	e.GET("/active/:page_no", product.ListActive)
 	e.POST("/", product.Create)
 	e.POST("/disable", product.Disable)
+	e.DELETE("/", product.Delete)
 	e.Logger.Fatal(e.Start(":9876"))
 }

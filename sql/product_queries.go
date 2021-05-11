@@ -2,6 +2,7 @@ package sql
 
 import (
 	"fmt"
+
 	"github.com/jinzhu/gorm"
 	model "github.com/saaitt/go-crud/model"
 )
@@ -25,7 +26,7 @@ func (p ProductRepo) List(pageNo int) ([]model.Product, error) {
 	return products, nil
 }
 func (p ProductRepo) Disable(productID int) error {
-	if err := p.DB.Model(&model.Product{}).Where("id = ?",productID).Update("is_active","false").Error;err !=nil{
+	if err := p.DB.Model(&model.Product{}).Where("id = ?", productID).Update("is_active", "false").Error; err != nil {
 		fmt.Println(err)
 		return err
 	}
@@ -37,4 +38,11 @@ func (p ProductRepo) ListActive(pageNo int) ([]model.Product, error) {
 		return nil, err
 	}
 	return products, nil
+}
+func (p ProductRepo) Delete(productID int) error {
+	if err := p.DB.Delete(&model.Product{}, productID).Error; err != nil {
+		fmt.Println(err)
+		return err
+	}
+	return nil
 }
